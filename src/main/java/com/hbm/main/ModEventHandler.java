@@ -1221,11 +1221,8 @@ public class ModEventHandler {
 		if(e.player instanceof EntityPlayerMP){
 			PacketDispatcher.sendTo(new AssemblerRecipeSyncPacket(AssemblerRecipes.recipeList, AssemblerRecipes.hidden), (EntityPlayerMP) e.player);
 			JetpackHandler.playerLoggedIn(e);
-			IHBMData props = HbmCapability.getData(e.player);
-			
-			PacketDispatcher.wrapper.sendToServer(new KeybindPacket(EnumKeybind.TOGGLE_HEAD, props.getEnableHUD()));
-			PacketDispatcher.wrapper.sendToServer(new KeybindPacket(EnumKeybind.TOGGLE_JETPACK, props.getEnableBackpack()));
 		}
+
 		if(!e.player.world.isRemote) {
 			e.player.sendMessage(new TextComponentTranslation("Loaded world with Hbm's Nuclear Tech Mod " + RefStrings.VERSION + " for Minecraft 1.12.2!"));
 
@@ -1239,7 +1236,11 @@ public class ModEventHandler {
 			
 			if(e.player instanceof EntityPlayerMP && !e.player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getBoolean("hasDucked"))
         		PacketDispatcher.wrapper.sendTo(new PlayerInformPacket("Press O to Duck!"), (EntityPlayerMP)e.player);
-		}
+		} else {
+      IHBMData props = HbmCapability.getData(e.player);
+			PacketDispatcher.wrapper.sendToServer(new KeybindPacket(EnumKeybind.TOGGLE_HEAD, props.getEnableHUD()));
+			PacketDispatcher.wrapper.sendToServer(new KeybindPacket(EnumKeybind.TOGGLE_JETPACK, props.getEnableBackpack()));
+    }
 	}
 	
 	@SubscribeEvent
